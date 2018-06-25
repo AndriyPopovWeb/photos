@@ -4,11 +4,7 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const User = require('../models/user')
-<<<<<<< HEAD
 const config = require('../config/config.js');
-=======
-const credentials = require('../config/credentials.js');
->>>>>>> daf276dbd153adbec1ca8ee986d993d977352907
 
 // mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost:27017/city-fox');
@@ -54,11 +50,7 @@ let auth = {
                             username: user.username,
                             admin: user.admin
                         };
-<<<<<<< HEAD
                         let token = jwt.sign(token_user, config.secretWord, {
-=======
-                        let token = jwt.sign(token_user, credentials.jwtSecret, {
->>>>>>> daf276dbd153adbec1ca8ee986d993d977352907
                             expiresIn: 60 * 10 // expires in 24 hours
                         });
                         if (user.admin) {
