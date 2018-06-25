@@ -13,7 +13,11 @@ module.exports = function(req, res, next) {
     // decode token
     if (token) {
         // verifies secret and checks exp
+<<<<<<< HEAD
         jwt.verify(token, config.secretWord, function(err, decoded) {
+=======
+        jwt.verify(token, config.jwtSecret, function(err, decoded) {
+>>>>>>> daf276dbd153adbec1ca8ee986d993d977352907
             if (err) {
                 return res.json({ success: false, message: 'Failed to authenticate token.' });
             } else {

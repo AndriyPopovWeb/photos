@@ -12,6 +12,7 @@ router.get('/login', function(req, res, next) {
     res.render('login', { title: 'Login' });
 });
 
+<<<<<<< HEAD
 router.post('/login', function(req, res, next) {
     console.log(req.body.email);
     if(req.body.email == ''  ) {
@@ -27,10 +28,13 @@ router.post('/login', function(req, res, next) {
     }));
 });
 
+=======
+>>>>>>> daf276dbd153adbec1ca8ee986d993d977352907
 router.get('/register', function(req, res, next) {
     res.render('register', { title: 'Register' });
 });
 
+<<<<<<< HEAD
 router.post('/register', function(req, res, next) {
     console.log(req.body.userName)
     var new_User = new User({
@@ -46,4 +50,6 @@ router.post('/register', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
+=======
+>>>>>>> daf276dbd153adbec1ca8ee986d993d977352907
 module.exports = router;
