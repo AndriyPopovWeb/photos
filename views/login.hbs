@@ -1,0 +1,13 @@
+<h1>{{title}}</h1>
+<p>Welcome to {{title}}</p>
+<form >
+<input type="text" name="email" id="email">
+<input type="password" name="password" id="password">
+<input type="button" onclick="f_login()" value="Log In">
+</form>
+<div>{{errormessage}}</div>
+<script>
+  function f_login() {
+        $.post( "./login");
+      }
+</script>
