@@ -1,13 +1,14 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
-<form >
-<input type="text" name="email" id="email">
-<input type="password" name="password" id="password">
-<input type="button" onclick="f_login()" value="Log In">
+<form method="POST">
+  <div class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-primary">Log In</button>
 </form>
 <div>{{errormessage}}</div>
-<script>
-  function f_login() {
-        $.post( "./login");
-      }
-</script>
