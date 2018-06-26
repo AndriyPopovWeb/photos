@@ -11,23 +11,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-    res.render('login', { title: 'Login' });
+    res.render('login', { title: 'Login', loginError: false });
 });
 
 router.post('/login', function(req, res, next) {
     if (req.body.email == '') {
-        res.render('login', { title: 'Login', errormessage: 'error email or pass' });
+        res.render('login', { title: 'Login', loginError: true });
     }
     if (req.body.password == '') {
-        res.render('login', { title: 'Login', errormessage: 'error email or pass' });
+        res.render('login', { title: 'Login', loginError: true });
     }
     if (User.findOne({ 'email': req.body.email }, function(err, user) {
             if (user == null) {
-                res.render('login', { title: 'Login', errormessage: 'error email or pass' });
+                res.render('login', { title: 'Login', loginError: true });
                 return;
             }
             if (user.password != req.body.password) {
-                res.render('login', { title: 'Login', errormessage: 'error email or pass' });
+                res.render('login', { title: 'Login', loginError: true });
                 return;
             }
             let token_user = {
