@@ -15,20 +15,19 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
+    console.log(req.body.email);
     if (req.body.email == '') {
-        res.render('login', { title: 'Login', loginError: true });
+        res.json({ loginError: -1 });
     }
     if (req.body.password == '') {
-        res.render('login', { title: 'Login', loginError: true });
+        res.json({ loginError: -2 });
     }
     if (User.findOne({ 'email': req.body.email }, function(err, user) {
             if (user == null) {
-                res.render('login', { title: 'Login', loginError: true });
-                return;
+                return res.json({ loginError: -3 });;
             }
             if (user.password != req.body.password) {
-                res.render('login', { title: 'Login', loginError: true });
-                return;
+                return res.json({ loginError: -4 });;
             }
             let token_user = {
                 name: user.name,
@@ -40,13 +39,11 @@ router.post('/login', function(req, res, next) {
             });
             if (user.admin) {
                 return res.json({
-                    status: 0,
                     token: token,
                     message: 'Admin',
                 });
             } else {
                 return res.json({
-                    status: 1,
                     token: token,
                     message: 'NotAdmin',
                 });
