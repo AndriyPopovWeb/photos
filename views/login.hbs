@@ -14,11 +14,13 @@
     <label for="password">Password</label>
     <input required name="password" type="password" class="form-control" id="password" placeholder="Password">
   </div>
-  <button type="submit" onsubmit="fLogin()" class="btn btn-primary">Log In</button>
+  <button type="button" onclick="fLogin()" class="btn btn-primary">Log In</button>
 </form>
 
 <script>
   function fLogin() {
+    email = $("#email").val();
+    password = $("#password").val();
     console.log("YES");
     fetch('/login', {
       method: 'post',

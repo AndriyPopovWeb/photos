@@ -15,7 +15,6 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-    console.log(req.body.email);
     if (req.body.email == '') {
         res.json({ loginError: -1 });
     }
