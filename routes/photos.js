@@ -7,12 +7,13 @@ const config = require('../config/config.js');
 
 router.get('/photos', function(req, res, next) {
     console.log("get_photos");
+    console.log(req.decoded);
     var images = [
         "https://dummyimage.com/600x400/000/0ff",
         "https://dummyimage.com/600x400/000/f0f",
         "https://dummyimage.com/600x400/000/ff0"
     ];
-    res.json({success: true, images: images});
+    res.json({ success: true, images: images });
 });
 
 module.exports = router;

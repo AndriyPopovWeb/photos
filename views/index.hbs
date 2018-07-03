@@ -4,9 +4,7 @@
 <script>
     $(function () {
         var tok = window.sessionStorage.getItem('authorization');
-        console.log(tok);
         if (tok) {
-
             fetch('/api/photos', {
                 method: 'get',
                 headers: {
@@ -29,8 +27,6 @@
                     }
                 })
                 .catch(err => console.log(err));
-        } else {
-            console.log("NO");
         }
     })
 </script>
