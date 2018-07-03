@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var photosRouter = require('./routes/photos');
 var mongoose = require('mongoose');
 
 var app = express();
@@ -24,6 +25,9 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+app.all('/api/*', [require('./config/validateRequest')]);
+
+app.use('/api/', photosRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

@@ -1,2 +1,36 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+<div id="content"></div>
+<script>
+    $(function () {
+        var tok = window.sessionStorage.getItem('authorization');
+        console.log(tok);
+        if (tok) {
+
+            fetch('/api/photos', {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": tok
+                }
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        var contentCards = '<div class="row">';
+                        data.images.forEach(function (item) {
+                            console.log(item);
+                            contentCards += '<div class="card col-md-4" style="width: 18rem;"><img class="card-img-top" src="' + item + '" alt="Card image cap"><div class="card-body"><h5 class="card-title">Card title</h5><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p><a href="#" class="btn btn-primary">Go somewhere</a></div></div>';
+                        });
+                        contentCards += '</div>';
+                        $("#content").html(contentCards);
+                    }
+                })
+                .catch(err => console.log(err));
+        } else {
+            console.log("NO");
+        }
+    })
+</script>

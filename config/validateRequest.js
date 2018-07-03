@@ -7,13 +7,12 @@ module.exports = function(req, res, next) {
     // We skip the token auth for [OPTIONS] requests.
     //if(req.method == 'OPTIONS') next();
     console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
-
-    let token = req.headers['bearer-token'];
-
+    let bToken = req.headers['authorization'];
     // decode token
-    if (token) {
+    if (bToken) {
+        let token = bToken.split(' ');
         // verifies secret and checks exp
-        jwt.verify(token, config.secretWord, function(err, decoded) {
+        jwt.verify(token[1], config.secretWord, function(err, decoded) {
             if (err) {
                 return res.json({ success: false, message: 'Failed to authenticate token.' });
             } else {
