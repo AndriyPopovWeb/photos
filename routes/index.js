@@ -54,6 +54,10 @@ router.get('/register', function(req, res, next) {
     res.render('register', { title: 'Register' });
 });
 
+router.get('/logout', function(req, res, next) {
+    res.render('logout');
+});
+
 router.post('/register', function(req, res, next) {
     console.log(req.body.userName)
     var new_User = new User({
