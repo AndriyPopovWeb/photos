@@ -1,11 +1,28 @@
-<div id="pageHead"></div>
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div id="uploadForm" class="custom-file mb-3">
+    <input type="file" name="file" id="file" class="custom-file-input">
+    <label for="file" class="custom-file-label">Choose File</label>
+    <input type="button" onclick="uploadImg()" value="Upload">
+</div>
 <div id="content"></div>
 <script>
+    function uploadImg() {
+        var fData = new FormData();
+        fData.append('file', file);
+        fetch('/api/photos', {
+            method: 'post',
+            body: fData
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.success);
+            })
+            .catch(err => console.log(err));
+    }
     $(function () {
         var tok = window.sessionStorage.getItem('authorization');
-        console.log(data);
         if (tok) {
             fetch('/api/photos', {
                 method: 'get',
@@ -26,6 +43,8 @@
                         });
                         contentCards += '</div>';
                         $("#content").html(contentCards);
+                    } else {
+                        document.getElementById("uploadForm").style.display = "none";
                     }
                 })
                 .catch(err => console.log(err));
