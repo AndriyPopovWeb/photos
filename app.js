@@ -4,6 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('fs');
+var passport = require('passport');
+var bodyParser = require('body-parser');
+var BearerStrategy = require('passport-http-bearer').Strategy;
+const jwt = require('jsonwebtoken');
+const config = require('./config/config.js');
 
 var indexRouter = require('./routes/index');
 var photosRouter = require('./routes/photos');
@@ -27,7 +32,23 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.all('/api/*', [require('./config/validateRequest')]);
+passport.use(new BearerStrategy((token, done) => {
+    try {
+        jwt.verify(token, config.secretWord, function(err, decoded) {
+            if (err) {
+                throw err;
+            } else {
+                // if everything is good, save to request for use in other routes
+                // req.decoded = decoded;
+                done(null, decoded);
+            }
+        });
+    } catch (error) {
+        done(null, false);
+    }
+}));
+
+app.all('/api/*', [passport.authenticate('bearer', {session: false})]);
 
 app.use('/api/', photosRouter);
 app.use('/', indexRouter);
