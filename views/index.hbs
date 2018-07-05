@@ -3,7 +3,7 @@
     <form>
         <div class="row">
             <div class="col-sm-9">
-                <input type="file" name="file" id="fileInput" class="custom-file-input" onchange="setNameFileInput()" accept=".jpg, .jpeg, .JPG, .JPEG">
+                <input type="file" name="file" id="fileInput" class="custom-file-input" accept=".jpg, .jpeg, .JPG, .JPEG">
                 <label for="file" class="custom-file-label">Choose File</label>
             </div>
             <div class="col-sm-3">
@@ -14,10 +14,6 @@
 </div>
 <div id="contentCards"></div>
 <script>
-    function setNameFileInput() {
-        var fileName = document.getElementById("fileInput").files[0].name;
-        $("fileInput").val(fileName);
-    }
     function uploadImg() {
         var fInput = document.getElementById("fileInput");
         var fData = new FormData();
