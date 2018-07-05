@@ -35,6 +35,7 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
+        // console.log(file);
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
@@ -48,18 +49,22 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 router.get('/photos', function(req, res, next) {
-    console.log("get_photos");
-    console.log(req.decoded);
-    var images = [
-        "https://dummyimage.com/600x400/000/0ff",
-        "https://dummyimage.com/600x400/000/f0f",
-        "https://dummyimage.com/600x400/000/ff0"
-    ];
-    res.json({ success: true, images: images });
+  gfs.files.find().toArray((err, files) => {
+    // Check if files
+    if (!files || files.length === 0) {
+      return res.json({
+        err: 'No files exist'
+      });
+    }
+
+    // Files exist
+    return res.json(files);
+  });
 });
 
 router.post('/photos', upload.single('file'), (req, res) => {
     // res.json({ file: req.file });
+    
     return res.json({success: true});
   });
 

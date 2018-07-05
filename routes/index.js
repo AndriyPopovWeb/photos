@@ -34,7 +34,7 @@ router.post('/login', function(req, res, next) {
                 admin: user.admin
             };
             let token = jwt.sign(token_user, config.secretWord, {
-                expiresIn: 60 * 10
+                expiresIn: 60 * 60 * 24
             });
             if (user.admin) {
                 return res.json({

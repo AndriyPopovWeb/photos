@@ -7,6 +7,7 @@ var fs = require('fs');
 
 var indexRouter = require('./routes/index');
 var photosRouter = require('./routes/photos');
+var imageRouter = require('./routes/image');
 var mongoose = require('mongoose');
 
 var app = express();
@@ -30,6 +31,7 @@ app.all('/api/*', [require('./config/validateRequest')]);
 
 app.use('/api/', photosRouter);
 app.use('/', indexRouter);
+app.use('/image', imageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
