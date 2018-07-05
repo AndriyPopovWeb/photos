@@ -3,7 +3,7 @@
     <form>
         <div class="row">
             <div class="col-sm-9">
-                <input type="file" name="file" id="fileInput" class="custom-file-input">
+                <input type="file" name="file" id="fileInput" class="custom-file-input" onchange="setNameFileInput()" accept=".jpg, .jpeg, .JPG, .JPEG">
                 <label for="file" class="custom-file-label">Choose File</label>
             </div>
             <div class="col-sm-3">
@@ -14,6 +14,10 @@
 </div>
 <div id="contentCards"></div>
 <script>
+    function setNameFileInput() {
+        var fileName = document.getElementById("fileInput").files[0].name;
+        $("fileInput").val(fileName);
+    }
     function uploadImg() {
         var fInput = document.getElementById("fileInput");
         var fData = new FormData();
@@ -26,6 +30,26 @@
                     "authorization": tok
                 },
                 body: fData
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(data => {
+                    window.location.href = "/";
+                })
+                .catch(err => console.log(err));
+        }
+    }
+    function delImg(id) {
+        console.log(id);
+        var tok = window.sessionStorage.getItem('authorization');
+        if (tok) {
+            fetch('/api/photos/' + id, {
+                method: 'delete',
+                headers: {
+                    "authorization": tok,
+                    "id": id
+                }
             })
                 .then(function (response) {
                     return response.json();
@@ -55,7 +79,9 @@
                     if (files) {
                         var cards = '<div class="row">';
                         files.forEach(function (file) {
-                            cards += '<div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" style="width: 18rem;"><img class="card-img-top" src="image/' + file.filename + '" alt="Card image cap"><div class="card-body"><h5 class="card-title">Card title</h5><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p><a href="#" class="btn btn-primary">Go somewhere</a></div></div>';
+                            cards += '<div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" style="width: 18rem;"><img class="card-img-top" src="image/' + file.filename + '" alt="Card image cap">';
+                            cards += '<div class="card-body"><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>';
+                            cards += '<button onclick="delImg(\'' + file._id + '\');" class="btn btn-danger">Delete</button></div></div>';
                         });
                         cards += '</div>';
                         $("#contentCards").html(cards);
