@@ -1,5 +1,5 @@
-<h1>{{title}}</h1>
-<div id="uploadForm" class="custom-file mb-3">
+<h1 align="center">{{title}}</h1>
+<div id="uploadForm" class="custom-file mb-3" style="display: none">
     <form>
         <div class="row">
             <div class="col-sm-9">
@@ -58,9 +58,8 @@
     }
     $(function () {
         var tok = window.sessionStorage.getItem('authorization');
-        var uForm = document.getElementById("uploadForm");
+        var uForm = $("#uploadForm");
         if (tok) {
-            uForm.style.display = "block";
             fetch('/api/photos', {
                 method: 'get',
                 headers: {
@@ -71,22 +70,20 @@
                 .then(function (response) {
                     return response.json();
                 })
-                .then(files => {
+                .then(function (files) {
+                    $("#uploadForm").show();
                     if (files) {
                         var cards = '<div class="row">';
                         files.forEach(function (file) {
                             cards += '<div class="card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" style="width: 18rem;"><img class="card-img-top" src="image/' + file.filename + '" alt="Card image cap">';
                             cards += '<div class="card-body"><p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>';
-                            cards += '<button onclick="delImg(\'' + file._id + '\');" class="btn btn-danger">Delete</button>';
-                            cards += '<button onclick="downloadImg(\'' + file._id + '\');" class="btn btn-primary">Download</button></div></div>';
+                            cards += '<button onclick="delImg(\'' + file._id + '\');" class="btn btn-danger">Delete</button></div></div>';
                         });
                         cards += '</div>';
                         $("#contentCards").html(cards);
                     }
                 })
                 .catch(err => console.log(err));
-        } else {
-            uForm.style.display = "none";
         }
     })
 </script>

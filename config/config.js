@@ -1,3 +1,4 @@
 module.exports = {
-    secretWord: "jwtSecret"
+    secretWord: "jwtSecret",
+    adminRegistrationPassword: "adminRegistrationSecret"
 }

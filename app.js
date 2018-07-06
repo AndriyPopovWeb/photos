@@ -13,11 +13,11 @@ const config = require('./config/config.js');
 var indexRouter = require('./routes/index');
 var photosRouter = require('./routes/photos');
 var imageRouter = require('./routes/image');
+var adminRegistrationRouter = require('./routes/adminRegistration');
 var mongoose = require('mongoose');
 
 var app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -34,12 +34,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 passport.use(new BearerStrategy((token, done) => {
     try {
-        jwt.verify(token, config.secretWord, function(err, decoded) {
+        jwt.verify(token, config.secretWord, function (err, decoded) {
             if (err) {
                 throw err;
             } else {
-                // if everything is good, save to request for use in other routes
-                // req.decoded = decoded;
                 done(null, decoded);
             }
         });
@@ -48,19 +46,20 @@ passport.use(new BearerStrategy((token, done) => {
     }
 }));
 
-app.all('/api/*', [passport.authenticate('bearer', {session: false})]);
+app.all('/api/*', [passport.authenticate('bearer', { session: false })]);
 
 app.use('/api/', photosRouter);
 app.use('/', indexRouter);
 app.use('/image', imageRouter);
+app.use('/admin/', adminRegistrationRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
