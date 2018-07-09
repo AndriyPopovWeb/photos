@@ -7,7 +7,7 @@ const config = require('../config/config.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Photos' });
 });
 
 router.get('/login', function (req, res, next) {
@@ -63,16 +63,25 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.post('/register', function (req, res, next) {
-    var new_User = new User({
-        userName: req.body.userName,
-        email: req.body.email,
-        password: req.body.password,
-        admin: false
-    });
-    console.log(new_User);
-    new_User.save(function (err) {
-        if (err) res.render('error', { message: 'write error' });
-    });
-    res.render('index', { title: 'Express' });
+    if (User.findOne({ 'email': req.body.email }, function (err, user) {
+        if (user == null) {
+            var new_User = new User({
+                userName: req.body.userName,
+                email: req.body.email,
+                password: req.body.password,
+                admin: false
+            });
+            new_User.save(function (err) {
+                if (err) res.render('error', { message: 'write error' });
+            });
+            return res.json({
+                regSuccess: 'ok',
+            });
+        } else {
+            return res.json({
+                regSuccess: 'no',
+            });
+        }
+    }));
 });
 module.exports = router;

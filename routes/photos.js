@@ -44,6 +44,7 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 router.get('/photos', function(req, res, next) {
+    console.log(req.user);
     gfs.files.find().toArray((err, files) => {
         if (!files || files.length === 0) {
             return res.json({
@@ -55,6 +56,14 @@ router.get('/photos', function(req, res, next) {
 });
 
 router.post('/photos', upload.single('file'), (req, res) => {
+    gfs.files.find({'filename': req.file.filename}).toArray((err, files) => {
+        if (!files || files.length === 0) {
+            return res.json({
+                err: 'No files exist'
+            });
+        }
+        
+    });
     return res.json({ success: true });
 });
 

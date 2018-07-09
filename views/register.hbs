@@ -1,5 +1,11 @@
 <h1 align="center">{{title}}</h1>
-<form method="post">
+<div class="alert alert-success" id="okRegister" role="alert" style="display: none">
+  You have successfully registered! Please log in.
+</div>
+<div class="alert alert-danger" id="notRegister" role="alert" style="display: none">
+  This e-mail is already in use!
+</div>
+<form method="POST">
   <div class="form-group">
     <label for="userName">Name</label>
     <input type="text" name="userName" class="form-control" id="userName" placeholder="Enter name">
@@ -13,5 +19,33 @@
     <label for="password">Password</label>
     <input name="password" type="password" class="form-control" id="password" placeholder="Password">
   </div>
-  <button type="submit" class="btn btn-primary">Register</button>
+  <input type="button" value="Register" onclick="fRegister()" class="btn btn-primary">
 </form>
+
+<script>
+  function fRegister() {
+    userName = $("#userName").val();
+    email = $("#email").val();
+    password = $("#password").val();
+    fetch('/register', {
+      method: 'post',
+      body: JSON.stringify({ 'userName': userName, 'email': email, 'password': password }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(data => {
+        if(data.regSuccess == 'ok') {
+          $("#okRegister").show();
+          $("#notRegister").hide();
+        } else {
+          $("#okRegister").hide();
+          $("#notRegister").show();
+        }
+      })
+      .catch(err => console.log(err));
+  }
+</script>
