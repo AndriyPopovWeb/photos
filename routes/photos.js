@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/user.js');
+const PhotoDetails = require('../models/photoDetails.js');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config.js');
 const bodyParser = require('body-parser');
@@ -44,25 +45,51 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 router.get('/photos', function(req, res, next) {
-    console.log(req.user);
     gfs.files.find().toArray((err, files) => {
         if (!files || files.length === 0) {
             return res.json({
                 err: 'No files exist'
             });
         }
-        return res.json(files);
+        let returnedData = [];
+        files.forEach(function(file) {
+            PhotoDetails.findOne({ fileId: file._id }, (err, photoDetails) => {
+                if (req.user.admin) {
+                    returnedData.push({
+                        file: file,
+                        description: photoDetails.description
+                    });
+                } else {
+                    if (req.user.username == photoDetails.user) {
+                        returnedData.push({
+                            file: file,
+                            description: photoDetails.description
+                        });
+                    }
+                }
+            });
+        });
+        setTimeout(() => {
+            return res.json(returnedData);
+        }, 200);
     });
 });
 
 router.post('/photos', upload.single('file'), (req, res) => {
-    gfs.files.find({'filename': req.file.filename}).toArray((err, files) => {
-        if (!files || files.length === 0) {
-            return res.json({
-                err: 'No files exist'
+    gfs.files.findOne({ filename: req.file.filename }, (err, file) => {
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: 'No file exists'
             });
         }
-        
+        var new_PhotoDetails = new PhotoDetails({
+            user: req.user.username,
+            description: req.body.description,
+            fileId: file._id
+        });
+        new_PhotoDetails.save(function(err) {
+            if (err) res.render('error', { message: 'write error' });
+        });
     });
     return res.json({ success: true });
 });
@@ -72,6 +99,7 @@ router.delete('/photos/:id', (req, res) => {
         if (err) {
             return res.status(404).json({ err: err });
         }
+        PhotoDetails.remove({ fileId: req.params.id });
         return res.json({ success: true });
     });
 });
